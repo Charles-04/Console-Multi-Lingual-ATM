@@ -5,7 +5,8 @@
     {
         public enum CommonNumbers
         {
-            sleepTimer = 2000
+            sleepTimer = 2000,
+            zero = 0,
         }
 
         public void Init()

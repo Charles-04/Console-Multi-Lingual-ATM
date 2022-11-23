@@ -47,8 +47,8 @@ namespace AutoTellerMachine
                     Console.Clear();
                     Console.WriteLine("Retrait ");
                     Console.WriteLine("Entrer le montant");
-                    double.TryParse((Console.ReadLine()), out double amount);
-                    if (amount <= account.AccountBalance)
+                    bool isAmountValid = double.TryParse((Console.ReadLine()), out double amount);
+                    if (amount <= account.AccountBalance && isAmountValid && amount > (int)CommonNumbers.zero)
                     {
                         account.Withdraw(amount);
                         Console.WriteLine("Retrait réussi ✅✅");
@@ -57,7 +57,7 @@ namespace AutoTellerMachine
                     }
                     else
                     {
-                        Console.WriteLine("Fonds insuffisants 😒😒");
+                        Console.WriteLine("Fonds insuffisants  ou Numéro invalide 😒😒");
                         ContinueTransaction();
                     }
                    
@@ -68,21 +68,30 @@ namespace AutoTellerMachine
                     Console.Clear();
                     Console.WriteLine("Transferts\n");
                     Console.WriteLine("Entrez le numéro de compte du bénéficiaire");
-                    long.TryParse((Console.ReadLine()), out long beneficiaryAccountNumber);
+                    bool isNumberValid = long.TryParse((Console.ReadLine()), out long beneficiaryAccountNumber);
 
                     Console.WriteLine("Entrer le montant");
-                    double.TryParse((Console.ReadLine()), out double transferAmount);
+                    bool isTransferAmountValid = double.TryParse((Console.ReadLine()), out double transferAmount);
 
-                    if (transferAmount <= account.AccountBalance)
+                    if (isNumberValid && isTransferAmountValid && transferAmount > (int)CommonNumbers.zero)
                     {
-                        account.Transfer(transferAmount, beneficiaryAccountNumber);
-                        Console.WriteLine($"👌👌Vous avez effectué avec succès un transfert de {transferAmount} à {beneficiaryAccountNumber}");
-                        ContinueTransaction();
+
+
+                        if (transferAmount <= account.AccountBalance )
+                        {
+                            account.Transfer(transferAmount, beneficiaryAccountNumber);
+                            Console.WriteLine($"👌👌Vous avez effectué avec succès un transfert de {transferAmount} à {beneficiaryAccountNumber}");
+                            ContinueTransaction();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Fonds insuffisants 😒😒");
+                            ContinueTransaction();
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("Fonds insuffisants 😒😒");
-                        ContinueTransaction();
+                        Console.WriteLine("le montant du transfert ou le numéro de compte est invalide");
                     }
                     break;
 

@@ -46,8 +46,8 @@ namespace AutoTellerMachine
                     Console.Clear();
                     Console.WriteLine("I nweputa ego ");
                     Console.WriteLine("Ego one ka I choro I nweputa");
-                    double.TryParse((Console.ReadLine()), out double amount);
-                    if (amount <= account.AccountBalance)
+                    var isAmountValid = double.TryParse((Console.ReadLine()), out double amount);
+                    if (amount <= account.AccountBalance && isAmountValid && amount > (int)CommonNumbers.zero)
                     {
                         account.Withdraw(amount);
 
@@ -57,7 +57,7 @@ namespace AutoTellerMachine
                     }
                     else
                     {
-                        Console.WriteLine("Ego gi ezugi ezu😒😒");
+                        Console.WriteLine("Ego gi ezugi ezu😒😒 maobu ozighi ezi");
                         ContinueTransaction();
                     }
                      break;
@@ -65,22 +65,31 @@ namespace AutoTellerMachine
                 case 2:
                     Console.Clear();
                     Console.WriteLine(" Tinye akauntu nomba onye i na-etinyere ego");
-                    long.TryParse((Console.ReadLine()), out long beneficiaryAccountNumber);
+                     var isNumberValid = long.TryParse((Console.ReadLine()), out long beneficiaryAccountNumber);
                     Console.WriteLine("Ego ole ");
 
-                    double.TryParse((Console.ReadLine()), out double transferAmount);
-                    if (transferAmount <= account.AccountBalance)
+                    var isTransferAmountValid =double.TryParse((Console.ReadLine()), out double transferAmount);
+                    if (isNumberValid && isTransferAmountValid && transferAmount > (int)CommonNumbers.zero)
                     {
-                        account.Transfer(transferAmount, beneficiaryAccountNumber);
-                        Console.WriteLine($"😁😁I tinyere {beneficiaryAccountNumber} ego na akauntu ya");
-                        ContinueTransaction();
+
+
+                        if (transferAmount <= account.AccountBalance)
+                        {
+                            account.Transfer(transferAmount, beneficiaryAccountNumber);
+                            Console.WriteLine($"😁😁I tinyere {beneficiaryAccountNumber} ego na akauntu ya");
+                            ContinueTransaction();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Ego gi ezugi ezu");
+                            ContinueTransaction();
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("Ego gi ezugi ezu");
+                        Console.WriteLine("Invalid transfer amount or account number");
                         ContinueTransaction();
                     }
-                    
                     break;
 
                 case 3:
