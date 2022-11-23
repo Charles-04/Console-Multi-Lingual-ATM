@@ -77,10 +77,11 @@ namespace AutoTellerMachine
          */
 
     }
-    internal interface Iaccount
+    internal interface Itransctions
     {
-        string Name { get; }
-        string Pin { get; }
+        void MachineOperations() { }
+        void OperationOptions() { }
+        void ContinueOptions() { }
 
 
     }

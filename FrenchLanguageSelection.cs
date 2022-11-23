@@ -3,7 +3,7 @@ using static AutoTellerMachine.Atm;
 
 namespace AutoTellerMachine
 {
-    internal class FrenchLanguageSelection
+    internal class FrenchLanguageSelection : Itransctions
     {
         Account account = new();
         Atm atm = new();
