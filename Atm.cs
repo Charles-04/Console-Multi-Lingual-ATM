@@ -13,6 +13,7 @@
 
             IgboLanguageSelection igbo = new();
             EnglishLanguageSelection english = new();
+            FrenchLanguageSelection french = new();
 
             Console.WriteLine("Select your preferred language");
             Console.WriteLine("\n1: Igbo \n2: English \n3: French");
@@ -35,6 +36,10 @@
                     break;
                 case 3:
                     Console.WriteLine("Vous avez choisi le français");
+                    Thread.Sleep((int)CommonNumbers.sleepTimer);
+                    Console.Clear();
+                    french.MachineOperations();
+
                     break;
                 default:
                     Console.WriteLine("Incorrect Option");

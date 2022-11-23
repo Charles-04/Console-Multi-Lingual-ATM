@@ -47,11 +47,21 @@ namespace AutoTellerMachine
                     Console.Clear();
                     Console.WriteLine("Retrait ");
                     Console.WriteLine("Entrer le montant");
-                    int.TryParse((Console.ReadLine()), out int amount);
-                    account.Withdraw(amount);
-                    Console.WriteLine("Retrait réussi");
-                    Console.WriteLine($"Votre solde reste {account.AccountBalance} ");
-                    ContinueTransaction();
+                    double.TryParse((Console.ReadLine()), out double amount);
+                    if (amount <= account.AccountBalance)
+                    {
+                        account.Withdraw(amount);
+                        Console.WriteLine("Retrait réussi ✅✅");
+                        Console.WriteLine($"Votre solde reste {account.AccountBalance} ");
+                        ContinueTransaction();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Fonds insuffisants 😒😒");
+                        ContinueTransaction();
+                    }
+                   
+                   
                     break;
 
                 case 2:
@@ -59,11 +69,21 @@ namespace AutoTellerMachine
                     Console.WriteLine("Transferts\n");
                     Console.WriteLine("Entrez le numéro de compte du bénéficiaire");
                     long.TryParse((Console.ReadLine()), out long beneficiaryAccountNumber);
+
                     Console.WriteLine("Entrer le montant");
-                    int.TryParse((Console.ReadLine()), out int transferAmount);
-                    account.Transfer(transferAmount, beneficiaryAccountNumber);
-                    Console.WriteLine($"Vous avez effectué avec succès un transfert vers {beneficiaryAccountNumber}");
-                    ContinueTransaction();
+                    double.TryParse((Console.ReadLine()), out double transferAmount);
+
+                    if (transferAmount <= account.AccountBalance)
+                    {
+                        account.Transfer(transferAmount, beneficiaryAccountNumber);
+                        Console.WriteLine($"👌👌Vous avez effectué avec succès un transfert de {transferAmount} à {beneficiaryAccountNumber}");
+                        ContinueTransaction();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Fonds insuffisants 😒😒");
+                        ContinueTransaction();
+                    }
                     break;
 
                 case 3:
@@ -75,7 +95,7 @@ namespace AutoTellerMachine
                     return;
 
                 default:
-                    Console.WriteLine("Option incorrecte");
+                    Console.WriteLine("Option incorrecte 😒😒");
                     Thread.Sleep((int)CommonNumbers.sleepTimer);
                     Console.Clear();
                     OperationOptions();

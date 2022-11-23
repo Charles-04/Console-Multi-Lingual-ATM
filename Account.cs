@@ -20,7 +20,7 @@ namespace AutoTellerMachine
 
         }
 
-       
+
 
         public bool Validate(int pin, long accountNumber)
         {
@@ -32,7 +32,7 @@ namespace AutoTellerMachine
             {
                 return false;
             }
-            
+
         }
         public double GetBalance()
         {
@@ -41,16 +41,26 @@ namespace AutoTellerMachine
 
         public void Transfer(double amount, long accountNumber)
         {
-            this.AccountBalance -= amount;
-            
+
+            if (amount <= this.AccountBalance)
+            {
+                this.AccountBalance -= amount;
+
+
+            }
+            else
+            {
+                Console.WriteLine("Insufficient Funds");
+            }
+
         }
 
         public void Withdraw(double amount)
         {
-            if (amount<= this.AccountBalance)
+            if (amount <= this.AccountBalance)
             {
                 this.AccountBalance -= amount;
-               
+
 
             }
             else
@@ -58,8 +68,8 @@ namespace AutoTellerMachine
                 Console.WriteLine("Insufficient Funds");
             }
         }
-       
-       
+
+
         /*acount number
          * account balance
          * 
@@ -69,7 +79,7 @@ namespace AutoTellerMachine
     }
     internal interface Iaccount
     {
-        string Name { get; } 
+        string Name { get; }
         string Pin { get; }
 
 

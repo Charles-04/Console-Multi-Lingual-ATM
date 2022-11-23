@@ -1,5 +1,4 @@
-﻿using System;
-using AutoTellerMachine;
+﻿
 using static AutoTellerMachine.Atm;
 
 namespace AutoTellerMachine
@@ -14,12 +13,12 @@ namespace AutoTellerMachine
             Console.WriteLine("tinye nomba akauntu gi");
             long.TryParse(Console.ReadLine(), out long accountNumber);
 
-            Console.WriteLine("Tinye pin gị ebe a");
+            Console.WriteLine("Tinye pin gi ebe a");
             int.TryParse(Console.ReadLine(), out int pin);
             if (account.Validate(pin, accountNumber))
             {
                 Console.Clear();
-                Console.WriteLine($"Nnoo {account._lastName} {account._firstName} \n");
+                Console.WriteLine($"Nnoo  {account._lastName} {account._firstName} \n");
                 
                 OperationOptions();
             }
@@ -47,14 +46,21 @@ namespace AutoTellerMachine
                     Console.Clear();
                     Console.WriteLine("I nweputa ego ");
                     Console.WriteLine("Ego one ka I choro I nweputa");
-                    int.TryParse((Console.ReadLine()), out int amount);
-                    account.Withdraw(amount);
+                    double.TryParse((Console.ReadLine()), out double amount);
+                    if (amount <= account.AccountBalance)
+                    {
+                        account.Withdraw(amount);
 
-                    Console.WriteLine("Mwepu gara nke oma");
-                    Console.WriteLine($"Ego gi foro {account.AccountBalance} ");
+                        Console.WriteLine("Mwepu gara nke oma ✅✅");
+                        Console.WriteLine($"Ego gi foro {account.AccountBalance} ");
 
-                    ContinueTransaction();
-                    break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ego gi ezugi ezu😒😒");
+                        ContinueTransaction();
+                    }
+                     break;
 
                 case 2:
                     Console.Clear();
@@ -62,11 +68,19 @@ namespace AutoTellerMachine
                     long.TryParse((Console.ReadLine()), out long beneficiaryAccountNumber);
                     Console.WriteLine("Ego ole ");
 
-                    int.TryParse((Console.ReadLine()), out int transferAmount);
-                    account.Transfer(transferAmount, beneficiaryAccountNumber);
-                    Console.WriteLine($"I tinyere {beneficiaryAccountNumber} ego na akauntu ya");
-
-                    ContinueTransaction();
+                    double.TryParse((Console.ReadLine()), out double transferAmount);
+                    if (transferAmount <= account.AccountBalance)
+                    {
+                        account.Transfer(transferAmount, beneficiaryAccountNumber);
+                        Console.WriteLine($"😁😁I tinyere {beneficiaryAccountNumber} ego na akauntu ya");
+                        ContinueTransaction();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ego gi ezugi ezu");
+                        ContinueTransaction();
+                    }
+                    
                     break;
 
                 case 3:

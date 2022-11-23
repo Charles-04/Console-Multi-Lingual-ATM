@@ -15,12 +15,12 @@ namespace AutoTellerMachine
             long.TryParse(Console.ReadLine(), out long accountNumber);
             Console.WriteLine("Enter your pin");
             int.TryParse(Console.ReadLine(), out int pin);
-            
-            if (account.Validate(pin,accountNumber))
+
+            if (account.Validate(pin, accountNumber))
             {
                 Console.Clear();
                 Console.WriteLine($"Welcome {account._lastName} {account._firstName} \n");
-               
+
                 OperationOptions();
             }
             else
@@ -47,12 +47,22 @@ namespace AutoTellerMachine
                 case 1:
                     Console.Clear();
                     Console.WriteLine("Withdrawal ");
-                    Console.WriteLine(" Enter amount");
-                    int.TryParse((Console.ReadLine()), out int amount);
-                    account.Withdraw(amount);
-                    Console.WriteLine("Withdrawal sucessful");
-                    Console.WriteLine($"Your balance remains {account.AccountBalance} ");
-                    ContinueTransaction();
+                    Console.WriteLine("Enter amount");
+                    double.TryParse((Console.ReadLine()), out double amount);
+                    if (amount <= account.AccountBalance)
+                    {
+                        account.Withdraw(amount);
+                        Console.WriteLine("Withdrawal sucessful");
+                        Console.WriteLine($"Your balance remains {account.AccountBalance} ");
+                        ContinueTransaction();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Insufficient funds");
+                        ContinueTransaction();
+                    }
+                   
+                   
                     break;
 
                 case 2:
@@ -61,21 +71,30 @@ namespace AutoTellerMachine
                     long.TryParse((Console.ReadLine()), out long beneficiaryAccountNumber);
                     Console.WriteLine(" Enter amount");
 
-                    int.TryParse((Console.ReadLine()), out int transferAmount);
-                    account.Transfer(transferAmount,beneficiaryAccountNumber);
-                    Console.WriteLine($"You have successfully made a Transfer to {beneficiaryAccountNumber}");
+                    double.TryParse((Console.ReadLine()), out double transferAmount);
 
-                    ContinueTransaction();
+                    if (transferAmount <= account.AccountBalance)
+                    {
+                        account.Transfer(transferAmount, beneficiaryAccountNumber);
+                        Console.WriteLine($"👌👌You have successfully made a Transfer of {transferAmount} to {beneficiaryAccountNumber}");
+                        ContinueTransaction();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Insufficient funds");
+                        ContinueTransaction();
+                    }
+
                     break;
 
                 case 3:
                     Console.Clear();
-                    Console.WriteLine($"Your balance is {account.GetBalance()}");
+                    Console.WriteLine($"Your balance is 💲 {account.GetBalance()}");
                     ContinueTransaction();
                     break;
                 case 4:
                     return;
-                    
+
                 default:
                     Console.WriteLine("Incorrect Option");
                     Thread.Sleep((int)CommonNumbers.sleepTimer);
@@ -86,7 +105,7 @@ namespace AutoTellerMachine
         }
         internal void ContinueTransaction()
         {
-            
+
             OperationOptions();
         }
     }
