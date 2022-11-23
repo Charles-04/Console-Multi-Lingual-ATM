@@ -100,6 +100,7 @@ namespace AutoTellerMachine
                     break;
 
                 case 4:
+                    Console.WriteLine("Daalu rie nne");
                     return;
 
                 default:

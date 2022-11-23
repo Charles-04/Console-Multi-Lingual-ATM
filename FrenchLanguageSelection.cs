@@ -101,6 +101,7 @@ namespace AutoTellerMachine
                     ContinueTransaction();
                     break;
                 case 4:
+                    Console.WriteLine("Merci d'utiliser nos services");
                     return;
 
                 default:
