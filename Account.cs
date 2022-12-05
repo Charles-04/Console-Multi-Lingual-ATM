@@ -1,4 +1,6 @@
 ﻿
+using System.Runtime.CompilerServices;
+
 namespace AutoTellerMachine
 {
     internal class Account
@@ -10,7 +12,9 @@ namespace AutoTellerMachine
         public string _lastName;
 
         internal double AccountBalance { get; private set; } = 30000.00;
-
+       
+        
+        
         public Account()
         {
             _accountNumber = 1232056263;
@@ -20,6 +24,7 @@ namespace AutoTellerMachine
 
         }
 
+      
 
 
         public bool Validate(int pin, long accountNumber)
@@ -48,10 +53,7 @@ namespace AutoTellerMachine
 
 
             }
-            else
-            {
-                Console.WriteLine("Insufficient Funds");
-            }
+          
 
         }
 
@@ -63,19 +65,14 @@ namespace AutoTellerMachine
 
 
             }
-            else
-            {
-                Console.WriteLine("Insufficient Funds");
-            }
+         
         }
 
 
-        /*acount number
-         * account balance
-         * 
-         *
-         */
+    
 
+        
+        
     }
     internal interface Itransctions
     {

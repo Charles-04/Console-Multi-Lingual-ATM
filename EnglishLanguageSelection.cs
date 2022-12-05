@@ -8,8 +8,14 @@ namespace AutoTellerMachine
 
         Account account = new();
         Atm atm = new();
+        public event Action<string> InsufficientFund;
 
-        internal void MachineOperations()
+        public void AddInsufficientFundMethod(Action<string> method)
+        {
+            InsufficientFund += method;
+        }
+
+        internal void Validate()
         {
             Console.WriteLine("Enter your account Number");
             long.TryParse(Console.ReadLine(), out long accountNumber);
@@ -28,7 +34,7 @@ namespace AutoTellerMachine
                 Console.WriteLine("Incorrect pin! Try again");
                 Thread.Sleep((int)CommonNumbers.sleepTimer);
                 Console.Clear();
-                MachineOperations();
+                Validate();
             }
         }
         internal void OperationOptions()
@@ -46,59 +52,19 @@ namespace AutoTellerMachine
 
                 case 1:
                     Console.Clear();
-                    Console.WriteLine("Withdrawal ");
-                    Console.WriteLine("Enter amount");
-                    bool isAmountValid = double.TryParse((Console.ReadLine()), out double amount);
-                    if (amount <= account.AccountBalance && isAmountValid && amount > (int)CommonNumbers.zero)
-                    {
-                        account.Withdraw(amount);
-                        Console.WriteLine("Withdrawal sucessful");
-                        Console.WriteLine($"Your balance remains {account.AccountBalance} ");
-                        ContinueTransaction();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Insufficient funds or Invalid amount");
-                        ContinueTransaction();
-                    }
+                    Withdraw();
                    
                    
                     break;
 
                 case 2:
                     Console.Clear();
-                    Console.WriteLine(" Enter beneficiary account Number");
-                    var isNumberValid = long.TryParse((Console.ReadLine()), out long beneficiaryAccountNumber);
-                    Console.WriteLine(" Enter amount");
-
-                    var isTransferAmountValid = double.TryParse((Console.ReadLine()), out double transferAmount);
-                    if (isNumberValid && isTransferAmountValid && transferAmount > (int)CommonNumbers.zero )
-                    {
-
-
-                        if (transferAmount <= account.AccountBalance)
-                        {
-                            account.Transfer(transferAmount, beneficiaryAccountNumber);
-                            Console.WriteLine($"👌👌You have successfully made a Transfer of {transferAmount} to {beneficiaryAccountNumber}");
-                            ContinueTransaction();
-                        }
-                        else
-                        {
-                            Console.WriteLine("Insufficient funds");
-                            ContinueTransaction();
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid transfer amount or Account Number");
-                        ContinueTransaction();
-                    }
+                    Transfer();
                     break;
 
                 case 3:
                     Console.Clear();
-                    Console.WriteLine($"Your balance is 💲 {account.GetBalance()}");
-                    ContinueTransaction();
+                    GetBalance();
                     break;
                 case 4:
                     Console.WriteLine("Thanks For Using our services");
@@ -117,5 +83,69 @@ namespace AutoTellerMachine
 
             OperationOptions();
         }
+
+
+     
+
+        void Withdraw()
+        {
+            Console.WriteLine("Withdrawal ");
+            Console.WriteLine("Enter amount");
+            bool isAmountValid = double.TryParse((Console.ReadLine()), out double amount);
+            if (amount <= account.AccountBalance && isAmountValid && amount > (int)CommonNumbers.zero)
+            {
+                account.Withdraw(amount);
+                Console.WriteLine("Withdrawal sucessful");
+                Console.WriteLine($"Your balance remains {account.AccountBalance} ");
+                ContinueTransaction();
+            }
+            else
+            {
+                OnInsufficientFund("Insufficient funds or Invalid amount");
+                ContinueTransaction();
+            }
+        }
+
+        void Transfer()
+        {
+            Console.WriteLine(" Enter beneficiary account Number");
+            var isNumberValid = long.TryParse((Console.ReadLine()), out long beneficiaryAccountNumber);
+            Console.WriteLine(" Enter amount");
+
+            var isTransferAmountValid = double.TryParse((Console.ReadLine()), out double transferAmount);
+            if (isNumberValid && isTransferAmountValid && transferAmount > (int)CommonNumbers.zero)
+            {
+
+
+                if (transferAmount <= account.AccountBalance)
+                {
+                    account.Transfer(transferAmount, beneficiaryAccountNumber);
+                    Console.WriteLine($"👌👌You have successfully made a Transfer of {transferAmount} to {beneficiaryAccountNumber}");
+                    ContinueTransaction();
+                }
+                else
+                {
+                    OnInsufficientFund("Insufficient funds");
+                    ContinueTransaction();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid transfer amount or Account Number");
+                ContinueTransaction();
+            }
+        }
+
+        void GetBalance()
+        {
+            Console.WriteLine($"Your balance is 💲 {account.GetBalance()}");
+            ContinueTransaction();
+        }
+
+        public virtual void OnInsufficientFund(string message)
+        {
+            InsufficientFund?.Invoke(message);
+        }
+       
     }
 }

@@ -13,11 +13,17 @@
         {
 
             IgboLanguageSelection igbo = new();
+            igbo.AddInsufficientFundMethod(InsufficentFundsAlert);
+
             EnglishLanguageSelection english = new();
+            english.AddInsufficientFundMethod(InsufficentFundsAlert);
+
             FrenchLanguageSelection french = new();
+            french.AddInsufficientFundMethod(InsufficentFundsAlert);
 
             Console.WriteLine("Select your preferred language");
             Console.WriteLine("\n1: Igbo \n2: English \n3: French");
+
 
             int.TryParse((Console.ReadLine()), out int Option);
             switch (Option)
@@ -26,20 +32,20 @@
                     Console.WriteLine("I hooro asusu Igbo");
                     Thread.Sleep((int)CommonNumbers.sleepTimer);
                     Console.Clear();
-                    igbo.MachineOperations();
+                    igbo.Validate();
 
                     break;
                 case 2:
                     Console.WriteLine("You Chose English");
                     Thread.Sleep((int)CommonNumbers.sleepTimer);
                     Console.Clear();
-                    english.MachineOperations();
+                    english.Validate();
                     break;
                 case 3:
                     Console.WriteLine("Vous avez choisi le français");
                     Thread.Sleep((int)CommonNumbers.sleepTimer);
                     Console.Clear();
-                    french.MachineOperations();
+                    french.Validate();
 
                     break;
                 default:
@@ -50,6 +56,11 @@
                     break;
             }
 
+            
+        }
+        static void InsufficentFundsAlert( string message)
+        {
+            Console.WriteLine(message);
         }
     }
 }

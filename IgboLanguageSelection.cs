@@ -7,8 +7,13 @@ namespace AutoTellerMachine
     {
         Account account = new();
         Atm atm = new();
-        
-       internal void MachineOperations()
+        event Action<string> InsufficientFund;
+
+        public void AddInsufficientFundMethod(Action<string> method)
+        {
+            InsufficientFund += method;
+        }
+       internal void Validate()
         {
             Console.WriteLine("tinye nomba akauntu gi");
             long.TryParse(Console.ReadLine(), out long accountNumber);
@@ -25,7 +30,7 @@ namespace AutoTellerMachine
             else
             {
                 Console.WriteLine("pin maobu akauntu nomba gi ezighi ezi, Tinye ya ozo");
-                MachineOperations();
+                Validate();
             }
         }
         internal void OperationOptions()
@@ -44,59 +49,17 @@ namespace AutoTellerMachine
 
                 case 1:
                     Console.Clear();
-                    Console.WriteLine("I nweputa ego ");
-                    Console.WriteLine("Ego one ka I choro I nweputa");
-                    var isAmountValid = double.TryParse((Console.ReadLine()), out double amount);
-                    if (amount <= account.AccountBalance && isAmountValid && amount > (int)CommonNumbers.zero)
-                    {
-                        account.Withdraw(amount);
-
-                        Console.WriteLine("Mwepu gara nke oma ✅✅");
-                        Console.WriteLine($"Ego gi foro {account.AccountBalance} ");
-
-                    }
-                    else
-                    {
-                        Console.WriteLine("Ego gi ezugi ezu😒😒 maobu ozighi ezi");
-                        ContinueTransaction();
-                    }
-                     break;
+                    Withdraw();
+                    break;
 
                 case 2:
                     Console.Clear();
-                    Console.WriteLine(" Tinye akauntu nomba onye i na-etinyere ego");
-                     var isNumberValid = long.TryParse((Console.ReadLine()), out long beneficiaryAccountNumber);
-                    Console.WriteLine("Ego ole ");
-
-                    var isTransferAmountValid =double.TryParse((Console.ReadLine()), out double transferAmount);
-                    if (isNumberValid && isTransferAmountValid && transferAmount > (int)CommonNumbers.zero)
-                    {
-
-
-                        if (transferAmount <= account.AccountBalance)
-                        {
-                            account.Transfer(transferAmount, beneficiaryAccountNumber);
-                            Console.WriteLine($"😁😁I tinyere {beneficiaryAccountNumber} ego na akauntu ya");
-                            ContinueTransaction();
-                        }
-                        else
-                        {
-                            Console.WriteLine("Ego gi ezugi ezu");
-                            ContinueTransaction();
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid transfer amount or account number");
-                        ContinueTransaction();
-                    }
+                    Transfers();
                     break;
 
                 case 3:
                     Console.Clear();
-                    Console.WriteLine($"Ego gi foro {account.GetBalance()}");
-                   
-                    ContinueTransaction();
+                    GetBalance();
                     break;
 
                 case 4:
@@ -112,10 +75,67 @@ namespace AutoTellerMachine
             }
 
         }
-        internal void ContinueTransaction()
-        {
 
-            OperationOptions();
+        internal void ContinueTransaction() =>  OperationOptions();
+        
+        void Withdraw()
+        {
+            Console.WriteLine("I nweputa ego ");
+            Console.WriteLine("Ego one ka I choro I nweputa");
+            var isAmountValid = double.TryParse((Console.ReadLine()), out double amount);
+            if (amount <= account.AccountBalance && isAmountValid && amount > (int)CommonNumbers.zero)
+            {
+                account.Withdraw(amount);
+
+                Console.WriteLine("Mwepu gara nke oma ✅✅");
+                Console.WriteLine($"Ego gi foro {account.AccountBalance} ");
+
+            }
+            else
+            {
+                OnInsufficientFund("Ego gi ezugi ezu maobu I deghi ya nke oma"); ;
+                ContinueTransaction();
+            }
+        }
+
+        void Transfers()
+        {
+            Console.WriteLine(" Tinye akauntu nomba onye i na-etinyere ego");
+            var isNumberValid = long.TryParse((Console.ReadLine()), out long beneficiaryAccountNumber);
+            Console.WriteLine("Ego ole ");
+
+            var isTransferAmountValid = double.TryParse((Console.ReadLine()), out double transferAmount);
+            if (isNumberValid && isTransferAmountValid && transferAmount > (int)CommonNumbers.zero)
+            {
+
+
+                if (transferAmount <= account.AccountBalance)
+                {
+                    account.Transfer(transferAmount, beneficiaryAccountNumber);
+                    Console.WriteLine($"😁😁I tinyere {beneficiaryAccountNumber} ego na akauntu ya");
+                    ContinueTransaction();
+                }
+                else
+                {
+                    OnInsufficientFund("Ego gi ezugi ezu");
+                    ContinueTransaction();
+                }
+            }
+            else
+            {
+                OnInsufficientFund("Ego gi ezugi ezu maobu I deghi ya nke oma"); ;
+                ContinueTransaction();
+            }
+        }
+
+        void GetBalance()
+        {
+            Console.WriteLine($"Ego gi foro {account.GetBalance()}");
+            ContinueTransaction();
+        }
+        public virtual void OnInsufficientFund(string message)
+        {
+            InsufficientFund?.Invoke(message);
         }
     }
 }
