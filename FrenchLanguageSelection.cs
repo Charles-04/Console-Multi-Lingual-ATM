@@ -5,10 +5,10 @@ namespace AutoTellerMachine
 {
     internal class FrenchLanguageSelection : Itransctions
     {
-        Account account = new();
-        Atm atm = new();
+       
+       
 
-        event Action<string> InsufficientFund;
+        event Action<string> ?InsufficientFund;
 
         public void AddInsufficientFundMethod(Action<string> method)
         {
@@ -22,10 +22,10 @@ namespace AutoTellerMachine
             Console.WriteLine("Entrez votre NIP");
             int.TryParse(Console.ReadLine(), out int pin);
 
-            if (account.Validate(pin, accountNumber))
+            if (Atm.account.Validate(pin, accountNumber))
             {
                 Console.Clear();
-                Console.WriteLine($"Bien venu {account._lastName} {account._firstName} \n");
+                Console.WriteLine($"Bien venu {Atm.account._lastName} {Atm.account._firstName} \n");
                
                 OperationOptions();
             }
@@ -47,7 +47,7 @@ namespace AutoTellerMachine
             {
                 case 0:
                     Console.Clear();
-                    atm.Init();
+                    Atm.Init();
                     break;
 
                 case 1:
@@ -62,7 +62,7 @@ namespace AutoTellerMachine
 
                 case 3:
                     Console.Clear();
-                    Console.WriteLine($"Votre solde est {account.GetBalance()}");
+                    Console.WriteLine($"Votre solde est {Atm.account.GetBalance()}");
                     ContinueTransaction();
                     break;
                 case 4:
@@ -84,11 +84,11 @@ namespace AutoTellerMachine
             Console.WriteLine("Retrait ");
             Console.WriteLine("Entrer le montant");
             bool isAmountValid = double.TryParse((Console.ReadLine()), out double amount);
-            if (amount <= account.AccountBalance && isAmountValid && amount > (int)CommonNumbers.zero)
+            if (amount <= Atm.account.AccountBalance && isAmountValid && amount > (int)CommonNumbers.zero)
             {
-                account.Withdraw(amount);
+                Atm.account.Withdraw(amount);
                 Console.WriteLine("Retrait réussi ✅✅");
-                Console.WriteLine($"Votre solde reste {account.AccountBalance} ");
+                Console.WriteLine($"Votre solde reste {Atm.account.AccountBalance} ");
                 ContinueTransaction();
             }
             else
@@ -110,9 +110,9 @@ namespace AutoTellerMachine
             {
 
 
-                if (transferAmount <= account.AccountBalance)
+                if (transferAmount <= Atm.account.AccountBalance)
                 {
-                    account.Transfer(transferAmount, beneficiaryAccountNumber);
+                    Atm.account.Transfer(transferAmount, beneficiaryAccountNumber);
                     Console.WriteLine($"👌👌Vous avez effectué avec succès un transfert de {transferAmount} à {beneficiaryAccountNumber}");
                     ContinueTransaction();
                 }

@@ -76,9 +76,9 @@ namespace AutoTellerMachine
     }
     internal interface Itransctions
     {
-        void MachineOperations() { }
-        void OperationOptions() { }
-        void ContinueOptions() { }
+        void Withdraw() { }
+        void Transfer() { }
+        void GetBalance() { }
 
 
     }

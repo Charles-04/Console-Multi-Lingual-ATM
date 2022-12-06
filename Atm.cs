@@ -1,15 +1,16 @@
 ﻿namespace AutoTellerMachine
 {
-    internal class Atm
+    internal static class Atm
 
     {
+        public static Account account = new();
         public enum CommonNumbers
         {
             sleepTimer = 2000,
             zero = 0,
         }
 
-        public void Init()
+        public static void Init()
         {
 
             IgboLanguageSelection igbo = new();

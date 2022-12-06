@@ -8,15 +8,11 @@ namespace AutoTellerMachine
         {
 
             Console.OutputEncoding = Encoding.UTF8;
+            Console.Title = "Truthy Bank";
             Atm util = new();
-             util.Init();
+            util.Init();
 
-           /* Account account = new();
-            account.GetBalance();
            
-            account.GetBalance();
-            account.Withdraw(4000);
-            account.GetBalance();*/
         }
     }
 }
