@@ -8,7 +8,7 @@ namespace AutoTellerMachine
 
        
         
-        public event Action<string> InsufficientFund;
+        public event Action<string> ?InsufficientFund;
 
         public void AddInsufficientFundMethod(Action<string> method)
         {
@@ -39,8 +39,7 @@ namespace AutoTellerMachine
         }
         internal void OperationOptions()
         {
-            Console.WriteLine("Choose banking operation\n");
-            Console.WriteLine("\n1 : Withdrawal \n2 : Transfers \n3 : Balance Check \n4 : exit  \n0 : Previous Menu");
+            Console.WriteLine("Choose banking operation \n\n1 : Withdrawal \n2 : Transfers \n3 : Balance Check \n4 : exit  \n0 : Previous Menu");
             int.TryParse((Console.ReadLine()), out int Option);
 
             switch (Option)
@@ -89,14 +88,13 @@ namespace AutoTellerMachine
 
         void Withdraw()
         {
-            Console.WriteLine("Withdrawal ");
-            Console.WriteLine("Enter amount");
+            Console.WriteLine("Withdrawal \n \n Enter amount");
             bool isAmountValid = double.TryParse((Console.ReadLine()), out double amount);
             if (amount <= Atm.account.AccountBalance && isAmountValid && amount > (int)CommonNumbers.zero)
             {
                 Atm.account.Withdraw(amount);
-                Console.WriteLine("Withdrawal sucessful");
-                Console.WriteLine($"Your balance remains {Atm.account.AccountBalance} ");
+                Console.WriteLine("");
+                Console.WriteLine($"Withdrawal sucessful \n \n Your balance remains {Atm.account.AccountBalance} ");
                 ContinueTransaction();
             }
             else

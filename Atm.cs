@@ -22,9 +22,7 @@
             FrenchLanguageSelection french = new();
             french.AddInsufficientFundMethod(InsufficentFundsAlert);
 
-            Console.WriteLine("Select your preferred language");
-            Console.WriteLine("\n1: Igbo \n2: English \n3: French");
-
+            Console.WriteLine("Select your preferred language \n \n 1: Igbo \n2: English \n3: French");
 
             int.TryParse((Console.ReadLine()), out int Option);
             switch (Option)
